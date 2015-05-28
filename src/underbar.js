@@ -103,6 +103,15 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
+    var sorted = [];
+    array.sort();
+    
+    for (var i=0,l=array.length; i<l; i++) {
+        if (array[i] != array[i+1]) {
+            sorted.push(array[i]);
+        }
+    }
+    return sorted;
   };
 
 
