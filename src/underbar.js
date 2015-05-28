@@ -166,8 +166,100 @@
   //     return total + number * number;
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
+  
+  /* FIRST IMPLEMENTATION OF _.REDUCE() on 05/14/2015
+
   _.reduce = function(collection, iterator, accumulator) {
-  };
+    if (arguments[2] === undefined) {
+        var total = collection[0];
+        for (var i = 1; i < collection.length; i++) {
+            total = iterator(total, collection[i]);
+        }
+    } else {
+        total = accumulator;
+        for (var h = 0; h < collection.length; h++) {
+          total = iterator(total, collection[h]);
+        }
+    }
+    return total;
+  }; 
+
+NOTE: First implementation of _.reduce() overlooked objects, which became obvious when moving on to _.contains(). Benefit of working through this implementatio: gained a better understanding of the arguments object.  */ 
+
+
+/*  SECOND IMPLEMENTATIO OF _.REDUCE() on 05/27/2015
+
+_.reduce = function(collection, iterator, accumulator) {
+// initialize variables?
+  var numArgs = arguments.length;
+
+// must decide if collection is instanceof Array
+  if (collection instanceof Array) {
+      if (numArgs != 3) {
+          accumulator = collection.shift();
+          for (var i=0; i<collection.length; i++) {
+              accumulator = iterator(accumulator, collection[i]);
+          }
+          return accumulator;
+      } else {
+          for (var h=0; h<collection.length; h++) {
+              accumulator = iterator(accumulator, collection[h]);
+          }
+          return accumulator;
+      }
+      
+  } else {
+      if(numArgs != 3){
+          var newArr = [];
+          for(var key in collection) {
+              newArr.push(collection[key]);
+          }
+          accumulator = newArr.shift();
+          for(var j=0; j<newArr.length; j++) {
+              accumulator = iterator(accumulator, newArr[j]);
+          }
+          return accumulator;
+      } else {
+          for(var key1 in collection) {
+              accumulator = iterator(accumulator, collection[key1]);
+          }
+          return accumulator;
+      }
+  }
+};  
+
+NOTE: Second implementation of _.reduce() added support for objects, which passed the original tests for reduce, as well as those for _.contains(). Benefit of this implementation: understanding instanceof operator. Drawback of this implementation: it's extremely lengthy for what it accomplishes. 
+
+*/
+
+// THIRD IMPLEMENTATION OF _.REDUCE() on 05/28/2015
+
+_.reduce = function(collection, iterator, accumulator) {
+    if (Array.isArray(collection)) {
+        accumulator === undefined ? (accumulator = collection.shift()) : accumulator;
+        for(var i = 0, l = collection.length; i < l; i++) {
+            accumulator = iterator(accumulator, collection[i]);
+        }
+        return accumulator;
+    } else {
+        if (accumulator === undefined) {
+            accumulator = collection[Object.keys(collection)[0]];
+            delete collection[Object.keys(collection)[0]];
+        }
+        for(var key in collection) {
+            accumulator = iterator(accumulator, collection[key]);
+        }
+        return accumulator;
+    }
+};
+
+/* NOTE: Third implementation of _.reduce() refactors much of the code of the second implementation for a much more compact iteration. Benefits of this implementation: 
+1. using ternary conditional to handle accumulator 
+2. understanding Array.isArray(obj); 
+3. optimized variable declarations in the loops; 
+4. understand Objects.keys() and using it to access the first property of an object without knowing the key name. */
+
+// BEGINNING OF PART 2 
 
   // Determine if the array or object contains a given value (using `===`).
   _.contains = function(collection, target) {
@@ -180,7 +272,6 @@
       return item === target;
     }, false);
   };
-
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
