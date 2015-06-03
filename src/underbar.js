@@ -275,8 +275,29 @@ _.reduce = function(collection, iterator, accumulator) {
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
-    // TIP: Try re-using reduce() here.
+    iterator = iterator || _.identity;
+    if (collection.length === 0) { 
+      return Boolean(collection);
+    } else {
+      var arrOfBools = [];
+      for(var i=0, l=collection.length; i<l; i++) {
+          if (iterator(collection[i])) {
+              arrOfBools.push(true);
+          } else {
+              return false;
+          }
+      }
+      return arrOfBools.shift();
+    }
   };
+/*
+  After too much circular thinking around how to reuse _.reduce(), decided to write something just to pass some tests and hopefully open up some thinking space; this iteration fails the first and the last test, but passes the others. 
+*/
+
+  // _.every = function(collection, iterator) {
+  //   if (iterator === undefined) { iterator = _.identity};
+  //   if (collection.length === 0 || Object.keys(collection).length === 0) { return false; }
+  // };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
