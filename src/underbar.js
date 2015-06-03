@@ -310,11 +310,6 @@ _.reduce = function(collection, iterator, accumulator) {
       var results = [];
       for (var i = 0; i < collection.length; i++) {
         results.push(Boolean(iterator(collection[i])));
-        // if (iterator(collection[i])) {
-        //   console.log(iterator(collection[i]));
-        // } else {
-        //   console.log(iterator(collection[i]));
-        // }
       };
     }
     return (_.contains(results, true));
@@ -340,6 +335,12 @@ _.reduce = function(collection, iterator, accumulator) {
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    for(var i=1; i<arguments.length; i++) {
+      for (var key in arguments[i]) {
+        obj[key] = arguments[i][key];
+      }
+    }
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
