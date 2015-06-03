@@ -290,6 +290,7 @@ _.reduce = function(collection, iterator, accumulator) {
       return arrOfBools.shift();
     }
   };
+
 /*
   After too much circular thinking around how to reuse _.reduce(), decided to write something just to pass some tests and hopefully open up some thinking space; this iteration fails the first and the last test, but passes the others. 
 */
@@ -302,7 +303,21 @@ _.reduce = function(collection, iterator, accumulator) {
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
-    // TIP: There's a very clever way to re-use every() here.
+    iterator = iterator || _.identity;
+    if (collection.length === 0) {
+      return false;
+    } else {
+      var results = [];
+      for (var i = 0; i < collection.length; i++) {
+        results.push(Boolean(iterator(collection[i])));
+        // if (iterator(collection[i])) {
+        //   console.log(iterator(collection[i]));
+        // } else {
+        //   console.log(iterator(collection[i]));
+        // }
+      };
+    }
+    return (_.contains(results, true));
   };
 
 
