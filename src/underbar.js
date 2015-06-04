@@ -446,8 +446,16 @@ _.reduce = function(collection, iterator, accumulator) {
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var args = Array.prototype.slice.call(arguments, 2);
+    return setTimeout(function(){
+      return func.apply(null, args); 
+    }, wait);
   };
+  /* 
+  Honestly, I initially couldn't figure out why Underscore had _.delay() when it seemed to serve the same purpose, and work exactly the same way as setTimeout(), but after doing some reading on SO, it sounds like the answer is cross browser support. 
 
+  NOTE: Read more about how Array.prototype.slice works; you're at the place where you know how to use it, but you're still unclear on exactly how it works. 
+  */
 
   /**
    * ADVANCED COLLECTION OPERATIONS
