@@ -396,8 +396,48 @@ _.reduce = function(collection, iterator, accumulator) {
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
+
+/*  _.memoize = function(func) {
+    var alreadyCalled = false,
+        result;
+    
+    return function() {
+        if (!alreadyCalled) {
+            result = func.apply(this, arguments);
+            alreadyCalled = true;
+            return result;
+        } else if (alreadyCalled) {
+            // ...
+        }
+    }
+  }; */
+
   _.memoize = function(func) {
+    var cache = {},
+        slice = Array.prototype.slice;
+    
+    return function() {
+      var args = slice.call(arguments), 
+          value;
+      
+      if (args in cache) {
+          value = cache[args];
+      } else {
+          value = func.apply(this, arguments);
+          cache[args] = value;
+      }
+      console.log(cache);
+      return value;
+    }; 
   };
+
+  /* 
+  
+  Really have to credit this post on sitepoint (http://www.sitepoint.com/implementing-memoization-in-javascript/) with showing me the way. 
+
+  When I arrived at this function, I remembered reading something in Crockford's Good Parts about memozing functions; however, when I went back to it, I quickly realized that it didn't answer the one thing that I was stuck on: combining two (or more) arguments into an index for the value they generate. 
+
+  */
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
