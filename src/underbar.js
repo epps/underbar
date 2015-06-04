@@ -454,7 +454,11 @@ _.reduce = function(collection, iterator, accumulator) {
   /* 
   Honestly, I initially couldn't figure out why Underscore had _.delay() when it seemed to serve the same purpose, and work exactly the same way as setTimeout(), but after doing some reading on SO, it sounds like the answer is cross browser support. 
 
+  See SO article: http://stackoverflow.com/questions/16890106/why-does-underscore-js-have-a-delay-function
+
   NOTE: Read more about how Array.prototype.slice works; you're at the place where you know how to use it, but you're still unclear on exactly how it works. 
+
+  UPDATED NOTE: Ha! Looked at the directions for _.shuffle() and realized the time to act on this note was now. 
   */
 
   /**
@@ -467,8 +471,24 @@ _.reduce = function(collection, iterator, accumulator) {
   // TIP: This function's test suite will ask that you not modify the original
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
+
   _.shuffle = function(array) {
+    var shuffled = array.slice();
+    shuffled.push(shuffled.shift());
+    return shuffled;
   };
+
+  /*
+  Just wanted to mess around with a second idea for the implementation: 
+  
+  _.shuffle = function(array) {
+    var shuffled = array.slice();
+    for (var i = 1; i < array.length; i++) {
+      shuffled.push(shuffled.shift());
+    }
+    return shuffled;
+  }
+  */
 
 
   /**
