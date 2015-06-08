@@ -397,21 +397,6 @@ _.reduce = function(collection, iterator, accumulator) {
   // already computed the result for the given argument and return that value
   // instead if possible.
 
-/*  _.memoize = function(func) {
-    var alreadyCalled = false,
-        result;
-    
-    return function() {
-        if (!alreadyCalled) {
-            result = func.apply(this, arguments);
-            alreadyCalled = true;
-            return result;
-        } else if (alreadyCalled) {
-            // ...
-        }
-    }
-  }; */
-
   _.memoize = function(func) {
     var cache = {},
         slice = Array.prototype.slice;
@@ -473,10 +458,27 @@ _.reduce = function(collection, iterator, accumulator) {
   // http://mdn.io/Array.prototype.slice
 
   _.shuffle = function(array) {
-    var shuffled = array.slice();
-    shuffled.push(shuffled.shift());
+    var toBeShuffled = array.slice(),
+        shuffled = [],
+        randNum;
+    while (shuffled.length < array.length) {
+        randNum = Math.floor(Math.random()*array.length);
+        if (toBeShuffled[randNum]) {
+            shuffled.push(toBeShuffled[randNum]);
+            toBeShuffled.splice(randNum,1);
+        }
+    }
+    if (shuffled[0] === array[0]) {
+        shuffled.push(shuffled.shift());
+    }
     return shuffled;
   };
+
+  // _.shuffle = function(array) {
+  //   var shuffled = array.slice();
+  //   shuffled.push(shuffled.shift());
+  //   return shuffled;
+  // };
 
   /*
   Just wanted to mess around with a second idea for the implementation: 
